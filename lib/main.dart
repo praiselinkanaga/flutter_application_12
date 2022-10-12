@@ -40,7 +40,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var _dropdown;
+  String? _selectedValue;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,10 +50,10 @@ class _MyHomePageState extends State<MyHomePage> {
             padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
             child: MyWidget(
               dropdownMenuList: DropDownList.createdFor
-                  .map((item) => DropdownMenuItem(
+                  .map((item) => DropdownMenuItem<dynamic>(
                         value: item,
                         child: Text(
-                          item['title'].toString(),
+                          item["title"].toString(),
                           style: const TextStyle(
                             fontSize: 14,
                           ),
@@ -61,7 +61,10 @@ class _MyHomePageState extends State<MyHomePage> {
                       ))
                   .toList(),
               onChanged: (value) {
-                _dropdown = value;
+                setState(() {
+                  _selectedValue = value;
+                });
+                print(value);
               },
             ),
           ),
@@ -84,7 +87,7 @@ class MyWidget extends StatefulWidget {
 class _MyWidgetState extends State<MyWidget> {
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField2(
+    return DropdownButtonFormField2<dynamic>(
       buttonWidth: double.infinity,
       isExpanded: true,
       dropdownElevation: 0,
@@ -133,10 +136,16 @@ class _MyWidgetState extends State<MyWidget> {
               bottomLeft: Radius.circular(5),
               bottomRight: Radius.circular(5)),
           shape: BoxShape.rectangle),
-
-      value: widget.onChanged,
+      //value: "",
       items: widget.dropdownMenuList,
-      //onChanged: ,
+      onChanged: ((value) {
+        widget.onChanged;
+        print(value);
+      }),
+      onSaved: (value) {
+        widget.onChanged.toString();
+        print(value);
+      },
       // DropDownList.createdFor
       //     .map((item) => DropdownMenuItem<dynamic>(
       //           value: item,
